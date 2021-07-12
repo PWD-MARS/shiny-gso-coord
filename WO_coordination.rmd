@@ -1,0 +1,60 @@
+---
+title: "GSI Work Order Query"
+author: "Nicholas Manna"
+date: '`r lubridate::today()`'
+runtime: shiny
+params: 
+  data_return: NA
+  datapath: NA
+  sheet: NA
+output: html_document
+knit: (function(inputFile, encoding) {rmarkdown::render(inputFile, encoding = encoding, output_file = file.path(dirname(inputFile), paste0(lubridate::today(), '_WO_Coordination.html')))})
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+
+### GSI MARS Work Order Coordination
+
+This document looks at each row of the main table in the `r params$sheet` tab within the spreadsheet: `r params$datapath`
+
+There are `r length(params$data_return[["work_order"]]$work_order)` rows, and `r length(params$data_return[["result"]]$WORKORDER)` work orders identified. Some rows of the table have multiple work orders, or have work orders that turned up subsequent child work orders, while many do not have a work order assigned. Work order status is broken down below. These are statuses relating to the work orders shown in the aforementioned spreadsheet, not including child work orders. Totals may not add up due to child work orders or work order affiliated with multiple SMPs or locations.  
+
+```{r breakdown, echo = FALSE}
+
+#present kable table in markdown
+params$data_return[["breakdown"]] %>% kable(caption = "Work Order Statuses", 
+                    col.names = c("Status", "Count")) %>% kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+
+```
+
+More information can be found for each entered Work Order below: 
+
+```{r result, echo = FALSE}
+
+reactable(params$data_return[["ordered_result"]], columns = list(
+  smp_id = colDef(name = "SMP ID"),
+   work_order = colDef(name = "Work Order"),
+  DESCRIPTION = colDef(name = "Work Order Type"), 
+  INITIATEDATE = colDef(name = "Initiate Date"),
+  ACTUALSTARTDATE  = colDef(name = "Start Date"),
+  ACTUALFINISHDATE = colDef(name = "Finish Date"),
+  SOURCEWOID = colDef(name = "Source WO"),
+  STATUS = colDef(name = "Status")
+  ),
+  details = function(index){
+  comment_data <- params$data_return[["comments"]][params$data_return[["comments"]]$WORKORDERID == params$data_return[["ordered_result"]]$work_order[index], ][2]
+  htmltools::div(style = "padding: 16px",
+                  reactable(comment_data, striped = TRUE))
+},
+  highlight = TRUE, searchable = TRUE, showPageSizeOptions = TRUE, pageSizeOptions = c(10, 20, 50, 100), defaultPageSize = 10, striped = TRUE)
+
+```
+
+Work Order comments are included in the csv that you can write from the Shiny App.
