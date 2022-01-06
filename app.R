@@ -89,7 +89,12 @@ server <- function(input, output, session){
     WO_cast <- paste0("CAST( ", WO_concat_cast, " AS nvarchar)")
     
     #connect to cityworks
-    cw <- dbConnect(odbc(), dsn = "Cityworks", uid = Sys.getenv("cw_uid"), pwd = Sys.getenv("cw_pwd"))
+    cw <- dbConnect(odbc(), 
+                    Driver = "ODBC Driver 17 for SQL Server",
+                    Server = "PWDCWSQLT.pwd.phila.local",
+                    Database = "PWD_Cityworks", 
+                    uid = Sys.getenv("cw_uid"), 
+                    pwd = Sys.getenv("cw_pwd"))
     
     #query work orders
     work_order_query <- paste0("SELECT WORKORDERID, DESCRIPTION, INITIATEDATE, ACTUALSTARTDATE, ACTUALFINISHDATE, SOURCEWOID, STATUS FROM Azteca.WORKORDER where WORKORDERID IN (", WO_concat, ") OR SOURCEWOID IN (", WO_cast, ")")
