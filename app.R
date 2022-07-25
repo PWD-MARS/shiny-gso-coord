@@ -92,7 +92,7 @@ server <- function(input, output, session){
     # cw <- dbConnect(odbc(), dsn = "Cityworks", uid = Sys.getenv("cw_uid"), pwd = Sys.getenv("cw_pwd"))
     cw <- dbConnect(odbc(),
                     Driver = "ODBC Driver 17 for SQL Server",
-                    Server = "pwdcwsqlP",
+                    Server = "pwdcwsqlP.pwd.phila.local",
                     Database = "PWD_Cityworks",
                     uid = Sys.getenv("cw_uid"),
                     pwd = Sys.getenv("cw_pwd"))
