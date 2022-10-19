@@ -78,7 +78,7 @@ server <- function(input, output, session){
                                    component_id = rep(work_order$component_id, sapply(work_order_list, length)), 
                                    work_order = as.numeric(unlist(work_order_list)))
     
-    #rcreate a dataframe that does not have NAs
+    #create a dataframe that does not have NAs
     work_order_no_NAs <- work_order_split[complete.cases(work_order_split), ]
     
     #concatenate work orders for search within Azteca.WORKORDER
@@ -98,6 +98,7 @@ server <- function(input, output, session){
                     pwd = Sys.getenv("cw_pwd"))
     
     #query work orders
+    # browser()
     work_order_query <- paste0("SELECT WORKORDERID, DESCRIPTION, INITIATEDATE, ACTUALSTARTDATE, ACTUALFINISHDATE, SOURCEWOID, STATUS FROM Azteca.WORKORDER where WORKORDERID IN (", WO_concat, ") OR SOURCEWOID IN (", WO_cast, ")")
     
     result <- dbGetQuery(cw, work_order_query) %>% 
@@ -134,7 +135,8 @@ server <- function(input, output, session){
     #attach the query results to the original list from the spreadsheet
     results_with_NAs <- dplyr::left_join(work_order_split, result, by = c("work_order" = "WORKORDERID"))
     
-    results_check <- bind_rows(results_with_NAs, ordered_result_step_two)
+    #changed from ordered_resut_step_2 to ordered_result, 10/19/2022
+    results_check <- bind_rows(results_with_NAs, ordered_result)
     
     #group results by the status, then count
     breakdown <- results_with_NAs %>% group_by(STATUS) %>% tally()
