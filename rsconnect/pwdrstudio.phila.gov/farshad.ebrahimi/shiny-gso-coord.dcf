@@ -1,0 +1,12 @@
+name: shiny-gso-coord
+title: shiny-gso-coord
+username: farshad.ebrahimi
+account: farshad.ebrahimi
+server: pwdrstudio.phila.gov
+hostUrl: https://pwdrstudio.phila.gov/__api__
+appId: 458
+bundleId: 2892
+url: https://pwdrstudio.phila.gov/content/203b3190-ae02-416e-95ad-a9057d9efc80/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
