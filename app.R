@@ -25,6 +25,8 @@ library(odbc)
 library(kableExtra)
 #data manipulation
 library(tidyverse)
+# package version
+library(renv)
 
 #1.0 user interface (UI) ------
 ui <- fluidPage(theme = shinytheme("cerulean"),
